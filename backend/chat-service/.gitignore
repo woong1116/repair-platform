@@ -39,5 +39,4 @@ out/
 # OS Files
 .DS_Store
 Thumbs.db
-
-**/application-secret.yml
+application-secret.yml
