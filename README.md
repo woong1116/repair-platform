@@ -1,9 +1,12 @@
-# 동네수리
+# 지역 기반 수리 매칭 플랫폼 (동네수리)
 
-   집 안의 고장·수리가 필요한 **의뢰자**와 **수리자**를 지역 기반으로 연결하는 수리 매칭 플랫폼입니다.<br/>멋쟁이사자처럼 자바 백엔드 부트캠프 24기 프로젝트입니다.
+가전제품 및 전자기기 수리가 필요한 의뢰자와 수리자를 지역 기반으로 연결하는 수리 매칭 플랫폼입니다.
+멋쟁이사자처럼 자바 백엔드 부트캠프 24기 파이널 프로젝트입니다.
 
 - 기간: 2026.09 (1개월)
 - 인원: 4명
+
+> 이 저장소는 팀 프로젝트를 fork하였습니다.
 
 ## 서비스 흐름
 
@@ -26,16 +29,18 @@
 
 ## 아키텍처
 
-마이크로서비스 구조이며, 모든 요청은 API Gateway를 거칩니다.
-
 | 서비스 | 역할 |
 |---|---|
 | api-gateway | 요청 라우팅 |
 | user-service | 회원·인증, 지역 |
-| post-service | 게시글, 거래(FixDeal), 계약서, 후기, 프로필(거래 내역) |
-| payment-service | 결제, 웹훅 처리, 정산 확정 기록 |
+| post-service | 게시글, 거래, 계약서, **후기**, **프로필** |
+| payment-service | **결제**, 웹훅 처리, |
 | chat-service | 채팅방, 메시지, 첨부파일 |
 | common | 공통 예외 처리, 로그인 사용자, 서비스 간 공유 객체 |
+
+## 내가 맡은 부분
+
+결제(payment-service), 후기 작성과 프로필 조회(post-service)를 구현했습니다.
 
 ### 결제 (payment-service)
 
@@ -80,6 +85,9 @@ PortOne 결제 연동입니다. 클라이언트가 보내는 값을 믿지 않�
 
 필요한 것: Java 21, MySQL
 
+1. 각 서비스의 `src/main/resources`에 `application-secret.yaml`을 만들어 DB 접속 정보와 PortOne 설정값을 넣습니다. (`application-secret.example.yaml` 참고 — 실제 값은 저장소에 올리지 않습니다)
+2. 서비스별로 실행합니다.
+
 ```bash
 cd backend/user-service && ./gradlew bootRun
 cd backend/post-service && ./gradlew bootRun
@@ -88,4 +96,12 @@ cd backend/chat-service && ./gradlew bootRun
 cd backend/api-gateway && ./gradlew bootRun
 ```
 
-API 문서: 각 서비스의 Swagger UI (`/swagger-ui.html`) 또는 게이트웨이의 `/{서비스명}/v3/api-docs`
+3. API 문서: 각 서비스의 Swagger UI (`/swagger-ui.html`) 또는 게이트웨이의 `/{서비스명}/v3/api-docs`
+
+## 테스트
+
+```bash
+./gradlew test
+```
+
+Flyway 스키마 검증은 Testcontainers(MySQL)로 실행하므로 Docker가 필요합니다.
