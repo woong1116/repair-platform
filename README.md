@@ -56,7 +56,7 @@ PortOne 결제 연동입니다. 클라이언트가 보내는 값을 믿지 않�
 
 ### 후기 작성 (post-service)
 
-`POST /reviews` (multipart)
+완료된 거래에 대한 후기를 작성합니다.
 
 - 거래가 완료(COMPLETED)된 건만 작성 가능
 - 의뢰자 본인만 작성 가능
